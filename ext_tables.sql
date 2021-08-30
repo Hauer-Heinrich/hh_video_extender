@@ -1,5 +1,5 @@
 CREATE TABLE sys_file_reference (
-    controls tinyint(4) DEFAULT '0' NOT NULL,
+    controls tinyint(4) DEFAULT '1' NOT NULL,
     loop tinyint(4) DEFAULT '0' NOT NULL,
     muted tinyint(4) DEFAULT '0' NOT NULL,
     preload tinyint(4) DEFAULT '0' NOT NULL,
