@@ -12,6 +12,9 @@
 /typo3conf/deprecation_*.log
 /typo3conf/AdditionalConfiguration.php
 
+## TYPO3 v10.4
+/public
+
 # Ignore system folders, you should have them symlinked.
 # If not comment out the following entries.
 /typo3
@@ -44,6 +47,8 @@ Thumbs.db
 *.out
 venv
 node_modules
+vendor
 .sass-cache
 .vscode/
+.idea
 .githooks/
