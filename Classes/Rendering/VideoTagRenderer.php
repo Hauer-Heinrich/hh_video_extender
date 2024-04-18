@@ -136,7 +136,15 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
                 }
             } else if($typoScript['previewOverride'] === '0') { // standard behavior
                 $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
-                $fileObjects = $fileRepository->findByRelation('sys_file_reference', 'preview_image', $file->getProperty('uid'));
+
+                $versionInformation = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class);
+                if($versionInformation->getMajorVersion() <= 11) {
+                    $fileObjects = $fileRepository->findByRelation('sys_file_reference', 'media', $file->getProperty('uid'));
+                }
+                if(empty($fileObjects)) {
+                    $fileObjects = $fileRepository->findByRelation('sys_file_reference', 'preview_image', $file->getProperty('uid'));
+                }
+
                 if(!empty($fileObjects)) {
                     $attributes[] = 'poster="'.$fileObjects[0]->getPublicUrl().'"';
 
