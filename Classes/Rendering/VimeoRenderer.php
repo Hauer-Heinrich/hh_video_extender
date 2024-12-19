@@ -81,10 +81,12 @@ class VimeoRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VimeoRenderer {
             $string = parent::render($file, $width, $height, $options, $usedPathsRelativeToCurrentScript);
             $newString = str_replace('<iframe', '<iframe class="video-defer"', $string);
             $dataSrc = str_replace('src=', 'data-src=', $newString);
+
             return $dataSrc.$previewImageResult;
         }
 
         $original = parent::render($file, $width, $height, $options, $usedPathsRelativeToCurrentScript);
+
         return $original.$previewImageResult;
     }
 }

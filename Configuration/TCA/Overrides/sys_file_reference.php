@@ -12,8 +12,7 @@ $customColumns = [
             'default' => 1,
             'items' => [
                 [
-                    0 => '',
-                    1 => '',
+                    'label' => 'on',
                 ]
             ],
         ]
@@ -28,8 +27,7 @@ $customColumns = [
             'default' => 0,
             'items' => [
                 [
-                    0 => '',
-                    1 => '',
+                    'label' => 'on',
                 ]
             ],
         ]
@@ -44,8 +42,7 @@ $customColumns = [
             'default' => 0,
             'items' => [
                 [
-                    0 => '',
-                    1 => '',
+                    'label' => 'on',
                 ]
             ],
         ]
@@ -58,9 +55,18 @@ $customColumns = [
             'type' => 'select',
             'renderType' => 'selectSingle',
             'items' => [
-                ['auto', 0, ''],
-                ['metadata', 1, ''],
-                ['none', 2, ''],
+                [
+                    'label' => 'auto',
+                    'value' => 0,
+                ],
+                [
+                    'label' => 'metadata',
+                    'value' => 1,
+                ],
+                [
+                    'label' => 'none',
+                    'value' => 2,
+                ],
             ],
             'default' => 0,
         ]
@@ -77,8 +83,7 @@ $customColumns = [
             'default' => 0,
             'items' => [
                 [
-                    0 => '',
-                    1 => '',
+                    'label' => 'on',
                 ]
             ],
         ]
@@ -94,45 +99,19 @@ $customColumns = [
             'default' => 1,
             'items' => [
                 [
-                    0 => '',
-                    1 => '',
+                    'label' => 'on',
                 ]
             ],
         ]
     ],
-
     'preview_image' => [
         'label' => 'preview image',
-        'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-            'media',
-            [
-                'appearance' => [
-                    'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference',
-                    'collapseAll' => 1,
-                    'expandSingle' => 1,
-                ],
-                // custom configuration for displaying fields in the overlay/reference table
-                // to use the image overlay palette instead of the basic overlay palette
-                'overrideChildTca' => [
-                    'types' => [
-                        '0' => [
-                            'showitem' => '
-                                --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                --palette--;;filePalette'
-                        ],
-                        \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
-                            'showitem' => '
-                                --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                --palette--;;filePalette'
-                        ],
-                    ],
-                ],
-
-                'minitems' => 0,
-                'maxitems' => 1,
-            ],
-            $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
-        ),
+        'config' => [
+            'type' => 'file',
+            'minitems' => 0,
+            'maxitems' => 1,
+            'allowd' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+        ],
     ],
     'click_preview_image_to_show_video' => [
         'exclude' => true,
@@ -144,8 +123,7 @@ $customColumns = [
             'default' => 1,
             'items' => [
                 [
-                    0 => '',
-                    1 => '',
+                    'label' => 'on',
                 ]
             ],
         ]

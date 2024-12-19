@@ -1,11 +1,12 @@
 <?php
 defined('TYPO3') || die();
 
-call_user_func(function() {
-    $extensionKey = 'hh_video_extender';
-
+call_user_func(function(string $extensionKey) {
     // automatically add TypoScript, can be disabled in the extension configuration (BE)
-    if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extensionKey]['config']['typoScript']) && $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extensionKey]['config']['typoScript'] === '1') {
+    if (
+        isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extensionKey]['config']['typoScript'])
+        && $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extensionKey]['config']['typoScript'] === '1'
+    ) {
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptConstants('@import "EXT:'.$extensionKey.'/Configuration/TypoScript/constants.typoscript"');
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup('@import "EXT:'.$extensionKey.'/Configuration/TypoScript/setup.typoscript"');
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup('@import "EXT:'.$extensionKey.'/Configuration/TypoScript/addFluid.typoscript"');
@@ -21,4 +22,4 @@ call_user_func(function() {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Resource\\Rendering\\VimeoRenderer'] = [
         'className' => 'HauerHeinrich\\HhVideoExtender\\Rendering\\VimeoRenderer'
     ];
-});
+}, 'hh_video_extender');

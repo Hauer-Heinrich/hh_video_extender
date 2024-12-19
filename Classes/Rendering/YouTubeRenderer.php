@@ -89,6 +89,7 @@ class YouTubeRenderer extends \TYPO3\CMS\Core\Resource\Rendering\YouTubeRenderer
         if ($file->getProperty('defer') === 1) {
             $newString = str_replace('<iframe', '<iframe class="video-defer"', $string);
             $dataSrc = str_replace('src=', 'data-src=', $newString);
+
             return $dataSrc.$previewImageResult;
         }
 
