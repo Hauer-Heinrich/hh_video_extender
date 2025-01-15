@@ -1,0 +1,5 @@
+name: hauerheinrich/hh-video-extender/FluidCe
+label: hh_video_extender, additional provides fluid templates
+
+dependencies:
+  - hauerheinrich/hh-video-extender

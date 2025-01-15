@@ -10,6 +10,17 @@ Extends TYPO3 core videorenderer with properties like:
 ### Installation
 ... like any other TYPO3 extension [extensions.typo3.org](https://extensions.typo3.org/extension/hh_video_extender/ "TYPO3 Extension Repository")
 
+#### Using the site set as dependency in a site config
+https://docs.typo3.org/m/typo3/reference-coreapi/13.4/en-us/ApiOverview/SiteHandling/SiteSets.html#site-sets-usage
+
+```
+base: 'https://example.com/'
+rootPageId: 1
+dependencies:
+  - hauerheinrich/hh-video-extender
+  - hauerheinrich/hh-video-extender/FluidCe (optional, or)
+```
+
 ### Features
 - added default html5 video attributes to enable at the TYPO3 backend
 - no changes in FLUID required

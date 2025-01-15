@@ -1,0 +1,5 @@
+name: hauerheinrich/hh-video-extender
+label: hh_video_extender, main set
+
+dependencies:
+  - typo3/fluid-styled-content
