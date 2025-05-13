@@ -167,11 +167,15 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         $attributes = array_unique($attributes);
 
         $resource = $file->getPublicUrl($usedPathsRelativeToCurrentScript);
-        $removedExtension = substr_replace($resource ,"", -3);
+        $removedExtension = substr_replace($resource ,"", -1 * \strlen($file->getExtension()));
+
+        $originalFile = $file->getOriginalFile();
+        $absoluteFilePath = $originalFile->getForLocalProcessing(false);
+        $absoluteFilePathRemovedExtension = substr_replace($absoluteFilePath ,"", -1 * \strlen($file->getExtension()));
 
         $videoSources = '';
         // webm
-        if(file_exists($removedExtension.'webm')) {
+        if(file_exists($absoluteFilePathRemovedExtension.'webm')) {
             $videoSources .= sprintf(
                 '<source src="%s" type="%s">',
                 htmlspecialchars($removedExtension.'webm'),
@@ -187,21 +191,21 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         );
 
         // ogv - ogg - ogm
-        if(file_exists($removedExtension.'ogv')) {
+        if(file_exists($absoluteFilePathRemovedExtension.'ogv')) {
             $videoSources .= sprintf(
                 '<source src="%s" type="%s">',
                 htmlspecialchars($removedExtension.'ogv'),
                 "video/ogg"
             );
         }
-        if(file_exists($removedExtension.'ogg')) {
+        if(file_exists($absoluteFilePathRemovedExtension.'ogg')) {
             $videoSources .= sprintf(
                 '<source src="%s" type="%s">',
                 htmlspecialchars($removedExtension.'ogg'),
                 "video/ogg"
             );
         }
-        if(file_exists($removedExtension.'ogm')) {
+        if(file_exists($absoluteFilePathRemovedExtension.'ogm')) {
             $videoSources .= sprintf(
                 '<source src="%s" type="%s">',
                 htmlspecialchars($removedExtension.'ogm'),
