@@ -96,13 +96,14 @@ $customColumns = [
         'config' => [
             'type' => 'check',
             'renderType' => 'checkboxToggle',
-            'default' => 1,
+            'default' => 0,
             'items' => [
                 [
                     'label' => 'on',
-                ]
+                    'invertStateDisplay' => true,
+                ],
             ],
-        ]
+        ],
     ],
     'preview_image' => [
         'label' => 'preview image',
