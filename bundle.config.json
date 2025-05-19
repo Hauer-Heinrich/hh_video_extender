@@ -1,0 +1,27 @@
+[
+    {
+        "outdir": ".",
+        "entryPoints": [
+            { "in": "./Resources/Public/Css/main.css", "out": "./Resources/Public/Css/main.min" },
+            { "in": "./Resources/Public/JavaScript/videoDeferLoading.js", "out": "./Resources/Public/JavaScript/videoDeferLoading.min" },
+            { "in": "./Resources/Public/JavaScript/clickPreviewImageToShowVideo.js", "out": "./Resources/Public/JavaScript/clickPreviewImageToShowVideo.min" }
+        ],
+        "bundle": true,
+        "write": true,
+        "minify": true,
+        "sourcemap": true,
+        "logLevel": "info",
+        "external": [
+            "./Images/*", "../Images/*",
+            "./Fonts/*", "../Fonts/*",
+            "./Icons/*", "../Icons/*",
+            "./Static/*", "../Static/*",
+            "./public/*", "../public/*",
+            "./static/*", "../static/*"
+        ],
+        "supported": {
+            "nesting": false,
+            "is-pseudo-class": false
+        }
+    }
+]

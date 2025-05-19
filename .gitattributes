@@ -8,6 +8,10 @@
 .vscode export-ignore
 github export-ignore
 
-gulpfile.js export-ignore
+bundle.config.json export-ignore
+bundle.config.json.example export-ignore
+bundle.mjs export-ignore
 package-lock.json export-ignore
 package.json export-ignore
+
+typo3-ext-hh_video_extender.code-workspace export-ignore

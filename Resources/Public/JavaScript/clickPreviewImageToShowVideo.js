@@ -9,8 +9,10 @@ window.addEventListener("load", function(e) {
 
     vidsContainer.forEach(function(vidC) {
         var videoPreview = vidC.querySelector(".video-preview");
-        videoPreview.addEventListener("click", function() {
-            videoPreview.classList.add("hide");
-        });
+        if(videoPreview) {
+            videoPreview.addEventListener("click", function() {
+                videoPreview.classList.add("hide");
+            });
+        }
     });
 });

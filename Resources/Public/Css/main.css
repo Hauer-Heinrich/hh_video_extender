@@ -1,40 +1,68 @@
-.video[data-type="external"] .video-embed {
-  padding-top: 56.25%;
-  overflow: hidden; }
-  .video[data-type="external"] .video-embed > iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0; }
+.video {
+    &[data-type="external"] {
+        & .video-embed {
+            padding-top: 56.25%;
+            overflow: hidden;
+
+            & > iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: 0;
+            }
+        }
+    }
+}
 
 .video-embed {
-  left: 0;
-  position: relative;
-  top: 0; }
-  .video-embed .video-embed-item {
-    max-width: 100%; }
-  .video-embed .video-preview {
     left: 0;
-    opacity: 1;
-    position: absolute;
+    position: relative;
     top: 0;
-    width: 100%;
-    transition: opacity 500ms; }
-  .video-embed .video-defer {
-    opacity: 0;
-    transition: all 500ms; }
-  .video-embed.loaded .video-preview {
-    display: none; }
-  .video-embed.loaded .video-defer {
-    opacity: 1; }
 
-[data-click-previewimage="1"] .video-embed .video-preview, [data-click-previewimage="1"] .video-embed.loaded .video-preview {
-  display: block;
-  opacity: 1; }
-  [data-click-previewimage="1"] .video-embed .video-preview.hide, [data-click-previewimage="1"] .video-embed.loaded .video-preview.hide {
-    opacity: 0;
-    pointer-events: none; }
+    & .video-embed-item {
+        max-width: 100%;
+    }
 
-/*# sourceMappingURL=sourcemaps/main.css.map */
+    & .video-preview {
+        left: 0;
+        opacity: 1;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        transition: opacity 500ms;
+    }
+
+    & .video-defer {
+        opacity: 0;
+        transition: all 500ms;
+    }
+
+    &.loaded {
+        & .video-preview {
+            display: none;
+        }
+
+        & .video-defer {
+            opacity: 1;
+        }
+    }
+}
+
+[data-click-previewimage="1"] {
+    & .video-embed {
+        &,
+        &.loaded {
+            & .video-preview {
+                display: block;
+                opacity: 1;
+
+                &.hide {
+                    opacity: 0;
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+}

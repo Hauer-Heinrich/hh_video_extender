@@ -72,6 +72,18 @@ This option uses JavaScript which is included, but it is recommended to use your
 
 ![example picture from backend](github/images/preview.jpg?raw=true "Title")
 
+### Development
+#### Setup
+1. `npm install`
+
+#### Usage of Build Tools
+- `npm run init` (only needed on first setup)
+- `npm run build` (build css, css nesting, js, sourcemaps & other files)
+- `npm run watch` (build css, css nesting, js, sourcemaps & other files everytime a file changes)
+- `npm run options` (show current build configuration/options)
+
+More informations/docs about the esbuild usage: https://github.com/iocron/esbuild-template-starter
+
 ##### Copyright notice
 
 This repository is part of the TYPO3 project. The TYPO3 project is
