@@ -169,7 +169,13 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         $resource = $file->getPublicUrl($usedPathsRelativeToCurrentScript);
         $removedExtension = substr_replace($resource ,"", -1 * \strlen($file->getExtension()));
 
-        $originalFile = $file->getOriginalFile();
+        if($file instanceof \TYPO3\CMS\Core\Resource\FileReference) {
+            $originalFile = $file->getOriginalFile();
+        }
+        if($file instanceof \TYPO3\CMS\Core\Resource\File) {
+            $originalFile = $file;
+        }
+
         $absoluteFilePath = $originalFile->getForLocalProcessing(false);
         $absoluteFilePathRemovedExtension = substr_replace($absoluteFilePath ,"", -1 * \strlen($file->getExtension()));
 
