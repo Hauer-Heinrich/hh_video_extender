@@ -74,7 +74,7 @@ This option uses JavaScript which is included, but it is recommended to use your
 For example, you have a video file in "fileadmin/user_uploads/my_videos/" and the video is called your_video_name.mp4", then you need to create a folder with the same(!) name of the video, in our example: "fileadmin/user_uploads/my_videos/your_video_name/".
 Within this folder, you must create a folder for each language you want to use, for example "en" or ‘de’ ("fileadmin/user_uploads/my_videos/your_video_name/en/").
 You can then create your ".vtt" files - i.e. "captions.vtt", "chapters.vtt", "descriptions.vtt", "subtitles.vtt" - within this language folder.
-You can find examples of these here: [VTT files](examples/VTT/).
+You can find examples of these here: [VTT files](Examples/VTT/).
 
 HINT:
 - "chapters" are loaded depending on the html-tag attribute "lang" (with fallback to english if available).
