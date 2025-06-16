@@ -12,6 +12,9 @@
     <f:render section="deferJavaScript" arguments="{file: file}" />
     <f:render section="clickPreviewImageToShowVideo" arguments="{settings: settings, file: file}" />
 </f:if>
+<f:if condition="{hhvideoextender.includeJavaScriptChapters}">
+    <f:asset.script identifier="hhvideoextender.includeJavaScriptChapters" defer="1" src="EXT:hh_video_extender/Resources/Public/JavaScript/videoTracksChapters.min.js" />
+</f:if>
 
 <f:variable name="clickPreviewImage"><f:if condition="{file.properties.click_preview_image_to_show_video}"><f:then>{file.properties.click_preview_image_to_show_video}</f:then><f:else><f:if condition="{hhvideoextender.clickPreviewImageToShowVideo}">{hhvideoextender.clickPreviewImageToShowVideo}</f:if></f:else></f:if></f:variable>
 

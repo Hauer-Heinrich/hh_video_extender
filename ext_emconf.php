@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "hh_video_extender".
  *
- * Auto generated 12-08-2022 06:03
+ * Auto generated 16-06-2025 12:00
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -14,7 +14,7 @@ $EM_CONF['hh_video_extender'] = [
     'title' => 'Hauer-Heinrich - Video Extender',
     'description' => 'Hauer-Heinrich - Extends sys_file_reference video/media. Added attributes to select in content element (eg textmedia) like: muted, loop, controls, previewImage and so on.',
     'category' => 'fe',
-    'version' => '0.4.1',
+    'version' => '0.5.0',
     'state' => 'beta',
     'uploadfolder' => false,
     'clearcacheonload' => false,

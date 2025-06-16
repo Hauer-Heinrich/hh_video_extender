@@ -30,6 +30,7 @@ dependencies:
 - you can overwrite the previewImage witch is set at the content-element (constants-editor)
 - you can output the preview image always as additonal img-tag instead of poster-attribute (constants-editor)
 - determines whether in the same directory as the mp4 video synonymous webm or ogg / ogv / ogm videos are with the same name, if so they are added as source
+- usage of html5 video tracks-tags see below.
 
 ### Todos
 - move preview-image to a css background solution
@@ -49,6 +50,10 @@ The file is automatically included only when it is needed. See FLUID file: [Vide
 ##### includeJavaScript
 Enable or disable automaticaly inclusion of the JavaScript file(s) of this Extension (default: on).
 The file is automatically included only when it is needed. See FLUID file: [Video.html](Resources/Private/Partials/Media/Type/Video.html).
+##### includeJavaScriptChapters
+Include JavaScript code for video chapter generation? (regardless of includeJavaScript option!)
+See video tracks section below!
+The file is automatically included only when it is needed. See FLUID file: [Video.html](Resources/Private/Partials/Media/Type/Video.html).
 ##### previewImage
 Set the path to the default previewImage, this image is also used as fallback if no PreviewImage is set at the ContentElement (CE).
 ##### previewImage_alt
@@ -64,6 +69,20 @@ Only valid for local videos, not for youtube and vimeo etc!
 Should the video only be visible after clicking on the PreviewImage? Default: off - as soon as the video is loaded, the video is displayed immediately. This option only hides the preview-image (-wrapper), no autoplay of the video!
 This option uses JavaScript which is included, but it is recommended to use your own JavaScript or copy this to your JavaScript library. Cause of loading extra file for a view lines of code.
 (default: off).
+
+#### Video tracks-tags - Usage (currently)
+For example, you have a video file in "fileadmin/user_uploads/my_videos/" and the video is called your_video_name.mp4", then you need to create a folder with the same(!) name of the video, in our example: "fileadmin/user_uploads/my_videos/your_video_name/".
+Within this folder, you must create a folder for each language you want to use, for example "en" or ‘de’ ("fileadmin/user_uploads/my_videos/your_video_name/en/").
+You can then create your ".vtt" files - i.e. "captions.vtt", "chapters.vtt", "descriptions.vtt", "subtitles.vtt" - within this language folder.
+You can find examples of these here: [VTT files](examples/VTT/).
+
+HINT:
+- "chapters" are loaded depending on the html-tag attribute "lang" (with fallback to english if available).
+- currently only languages are loaded that are also stored in the TYPO3 site-config.yaml.
+
+More information about VTT files
+[Web_Video_Text_Tracks_Format](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API/Web_Video_Text_Tracks_Format ".mozilla.org WebVTT")
+
 
 ### IMPORTENT NOTICE
 - Vimeo is not tested!

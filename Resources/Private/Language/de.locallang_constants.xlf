@@ -12,6 +12,10 @@
                 <target>Automatische JavaScript einbindung, falls erforderlich?</target>
             </trans-unit>
 
+            <trans-unit id="config.includeJavaScriptChapters" xml:space="preserve">
+                <source>JavaScript-Code für die Erstellung von Videokapiteln einbinden? (unabhängig von der includeJavaScript-Option!)</source>
+            </trans-unit>
+
             <trans-unit id="config.previewImage">
                 <target>URL / Pfad zu dem preview Bild (e. g. fileadmin/user_upload/myImage.jpg)</target>
             </trans-unit>

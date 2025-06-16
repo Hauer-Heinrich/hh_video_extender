@@ -12,6 +12,10 @@
                 <source>Automatic JavaScript integration, if required?</source>
             </trans-unit>
 
+            <trans-unit id="config.includeJavaScriptChapters" xml:space="preserve">
+                <source>Include JavaScript code for video chapter generation? (regardless of includeJavaScript option!)</source>
+            </trans-unit>
+
             <trans-unit id="config.previewImage" xml:space="preserve">
                 <source>URL / Path of the preview image (e. g. fileadmin/user_upload/myImage.jpg)</source>
             </trans-unit>

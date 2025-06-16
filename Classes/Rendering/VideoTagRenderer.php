@@ -18,6 +18,7 @@ namespace HauerHeinrich\HhVideoExtender\Rendering;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Resource\FileInterface;
 use \TYPO3\CMS\Core\Resource\FileReference;
+use \TYPO3\CMS\Core\Site\SiteFinder;
 
 class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRenderer {
 
@@ -179,6 +180,51 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         $absoluteFilePath = $originalFile->getForLocalProcessing(false);
         $absoluteFilePathRemovedExtension = substr_replace($absoluteFilePath ,"", -1 * \strlen($file->getExtension()));
 
+        // Code for Track(s)-HTML-Tags
+        $tracks = '';
+        $trackKinds = ['captions', 'subtitles', 'chapters', 'descriptions', 'metadata'];
+
+
+        $originalFileNameWithExtension = $originalFile->getName();
+        $originalFileName = rtrim(substr_replace($originalFileNameWithExtension ,"", -1 * \strlen($file->getExtension())), '.');
+        $absoluteFileDirectoryPath = \str_replace($originalFile->getName(), '', $absoluteFilePath);
+        $tracksAbsoluteDirectoryPath = $absoluteFileDirectoryPath . $originalFileName . '_tracks/';
+        $tracksRelativeDirectoryPath = rtrim($resource, $originalFileNameWithExtension) . $originalFileName . '_tracks/';
+
+        if(is_dir($tracksAbsoluteDirectoryPath)) {
+            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+            $currentSite = $siteFinder->getSiteByPageId($GLOBALS['TSFE']->id);
+
+            // Enthält alle konfigurierten Sprachen
+            $availableLanguages = [];
+            foreach ($currentSite->getLanguages() as $language) {
+                $languageCode = $language->getLocale()->getLanguageCode(); // z. B. "de", "en"
+                $label = $language->getTitle(); // z. B. "Deutsch", "English"
+                $availableLanguages[$languageCode] = $label;
+            }
+
+            foreach ($availableLanguages as $langCode => $langLabel) {
+                $langDir = $tracksAbsoluteDirectoryPath . $langCode . '/';
+                if (!is_dir($langDir)) {
+                    continue;
+                }
+
+                foreach ($trackKinds as $kind) {
+                    $absoluteFilePath = $tracksAbsoluteDirectoryPath . $langCode . '/' . $kind . '.vtt';
+                    if (file_exists($absoluteFilePath)) {
+                        $relativeFilePath = $tracksRelativeDirectoryPath . $langCode . '/' . $kind . '.vtt';
+                        $tracks .= sprintf(
+                            '<track src="%s" kind="%s" srclang="%s" label="%s">' . PHP_EOL,
+                            htmlspecialchars($relativeFilePath),
+                            $kind,
+                            $langCode,
+                            $langLabel
+                        );
+                    }
+                }
+            }
+        }
+
         $videoSources = '';
         // webm
         if(file_exists($absoluteFilePathRemovedExtension.'webm')) {
@@ -192,7 +238,7 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         // mp4 - default
         $videoSources .= sprintf(
             '<source src="%s" type="%s">',
-            htmlspecialchars($file->getPublicUrl($usedPathsRelativeToCurrentScript)),
+            htmlspecialchars($resource),
             $file->getMimeType()
         );
 
@@ -225,6 +271,6 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         );
         $videoTagEnd = '</video>';
 
-        return $videoTagBegin . $videoSources . $videoTagEnd . $previewImageResult;
+        return $videoTagBegin . $videoSources . $tracks . $videoTagEnd . $previewImageResult;
     }
 }

@@ -1,11 +1,14 @@
 plugin.tx_hhvideoextender {
     isLoaded = 1
     ### Basic
-    # cat=plugin.tx_hhvideoextender/basic/0005; type=boolean; label=LLL:EXT:hh_video_extender/Resources/Private/Language/locallang_constants.xlf:config.includeJavaScript
+    # cat=plugin.tx_hhvideoextender/basic/0004; type=boolean; label=LLL:EXT:hh_video_extender/Resources/Private/Language/locallang_constants.xlf:config.includeJavaScript
         includeCss = 1
 
     # cat=plugin.tx_hhvideoextender/basic/0005; type=boolean; label=LLL:EXT:hh_video_extender/Resources/Private/Language/locallang_constants.xlf:config.includeJavaScript
         includeJavaScript = 1
+
+    # cat=plugin.tx_hhvideoextender/basic/0006; type=boolean; label=LLL:EXT:hh_video_extender/Resources/Private/Language/locallang_constants.xlf:config.includeJavaScriptChapters
+        includeJavaScriptChapters = 1
 
     # cat=plugin.tx_hhvideoextender/basic/0010; type=string; label=LLL:EXT:hh_video_extender/Resources/Private/Language/locallang_constants.xlf:config.previewImage
         previewImage =

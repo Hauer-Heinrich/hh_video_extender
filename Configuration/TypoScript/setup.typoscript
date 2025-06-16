@@ -2,6 +2,7 @@ plugin.tx_hhvideoextender {
     settings {
         includeCss = {$plugin.tx_hhvideoextender.includeCss}
         includeJavaScript = {$plugin.tx_hhvideoextender.includeJavaScript}
+        includeJavaScriptChapters = {$plugin.tx_hhvideoextender.includeJavaScriptChapters}
         previewImage = {$plugin.tx_hhvideoextender.previewImage}
         previewImage_alt = {$plugin.tx_hhvideoextender.previewImage_alt}
         previewImage_title = {$plugin.tx_hhvideoextender.previewImage_title}
@@ -16,6 +17,7 @@ lib.contentElement {
         hhvideoextender {
             includeCss = {$plugin.tx_hhvideoextender.includeCss}
             includeJavaScript = {$plugin.tx_hhvideoextender.includeJavaScript}
+            includeJavaScriptChapters = {$plugin.tx_hhvideoextender.includeJavaScriptChapters}
             previewImage = {$plugin.tx_hhvideoextender.previewImage}
             previewImage_alt = {$plugin.tx_hhvideoextender.previewImage_alt}
             previewImage_title = {$plugin.tx_hhvideoextender.previewImage_title}

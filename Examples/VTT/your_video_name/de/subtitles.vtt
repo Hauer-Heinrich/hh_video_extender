@@ -1,0 +1,10 @@
+WEBVTT
+
+NOTE More info:
+NOTE https://developer.mozilla.org/de/docs/Web/API/WebVTT_API/Web_Video_Text_Tracks_Format
+
+00:00:01.000 --> 00:00:03.000
+Hallo! Willkommen in unserem Video.
+
+00:00:04.000 --> 00:00:06.000
+Heute zeigen wir dir ein paar Tricks.
