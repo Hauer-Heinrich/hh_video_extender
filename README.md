@@ -71,12 +71,39 @@ This option uses JavaScript which is included, but it is recommended to use your
 (default: off).
 
 #### Video tracks-tags - Usage (currently)
-For example, you have a video file in "fileadmin/user_uploads/my_videos/" and the video is called your_video_name.mp4", then you need to create a folder with the same(!) name of the video, in our example: "fileadmin/user_uploads/my_videos/your_video_name/".
-Within this folder, you must create a folder for each language you want to use, for example "en" or ‘de’ ("fileadmin/user_uploads/my_videos/your_video_name/en/").
+For example, you have a video file in "fileadmin/user_uploads/my_videos/" and the video is called your_video_name.mp4", then you need to create a folder with the same name of the video plus the suffix "_tracks"(!), in our example: "fileadmin/user_uploads/my_videos/your_video_name_tracks/".
+Within this folder, you must create a folder for each language you want to use, for example "en" or ‘de’ ("fileadmin/user_uploads/my_videos/your_video_name_tracks/en/").
 You can then create your ".vtt" files - i.e. "captions.vtt", "chapters.vtt", "descriptions.vtt", "subtitles.vtt" - within this language folder.
 You can find examples of these here: [VTT files](Examples/VTT/).
 
+##### If you want custom track-labels
+Default (fallback): uses the "title" of the language from your site config.yaml
+Custom:
+Add an entry below "videoTracks" -> "labels" for each language in your site config.yaml for each type of track (structure is important), e. g.:
+```
+languages:
+  -
+    title: English
+    enabled: true
+    languageId: '1'
+    base: /en/
+    typo3Language: en
+    locale: en_US.UTF-8
+    iso-639-1: en
+    navigationTitle: EN
+    hreflang: en
+    direction: ltr
+    fallbackType: free
+    fallbacks: '0'
+    flag: en-us-gb
+    videoTracks:
+      labels:
+        captions: custom label for caption
+        subtitles: label customized for subtiles
+```
+
 HINT:
+- after changeing the site-config, clear the cache :)
 - "chapters" are loaded depending on the html-tag attribute "lang" (with fallback to english if available).
 - currently only languages are loaded that are also stored in the TYPO3 site-config.yaml.
 

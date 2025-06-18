@@ -199,17 +199,26 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
             $availableLanguages = [];
             foreach ($currentSite->getLanguages() as $language) {
                 $languageCode = $language->getLocale()->getLanguageCode(); // z. B. "de", "en"
-                $label = $language->getTitle(); // z. B. "Deutsch", "English"
-                $availableLanguages[$languageCode] = $label;
+                $availableLanguages[$languageCode]['fallbackLabel'] = $language->getTitle(); // z. B. "Deutsch", "English"
+
+                if(isset($language->toArray()['videoTracks']['labels'])) {
+                    $availableLanguages[$languageCode]['labels'] = $language->toArray()['videoTracks']['labels'];
+                }
             }
 
-            foreach ($availableLanguages as $langCode => $langLabel) {
+            foreach ($availableLanguages as $langCode => $lang) {
                 $langDir = $tracksAbsoluteDirectoryPath . $langCode . '/';
                 if (!is_dir($langDir)) {
                     continue;
                 }
 
                 foreach ($trackKinds as $kind) {
+                    if(isset($lang['labels'][$kind])) {
+                        $langLabel = $lang['labels'][$kind];
+                    } else {
+                        $langLabel = $lang['fallbackLabel'];
+                    }
+
                     $absoluteFilePath = $tracksAbsoluteDirectoryPath . $langCode . '/' . $kind . '.vtt';
                     if (file_exists($absoluteFilePath)) {
                         $relativeFilePath = $tracksRelativeDirectoryPath . $langCode . '/' . $kind . '.vtt';

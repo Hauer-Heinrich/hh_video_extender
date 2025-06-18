@@ -24,8 +24,6 @@ window.addEventListener("load", () => {
 
         selectedTrack.mode = "hidden";
 
-        console.log(selectedTrack);
-
         // Kapitel-Container erstellen
         const chapterContainer = document.createElement("div");
         chapterContainer.classList.add("video-chapters");
