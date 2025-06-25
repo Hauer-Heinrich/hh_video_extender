@@ -4,7 +4,7 @@ Extends sys_file_reference video/media. Added attributes to select in content el
 
 Extends TYPO3 core videorenderer with properties like:
 - for vimeo and youtube: defer loading (uses javascript to load video resource after page load)
-- for youtube: loop, controls, relatedVideos, autoplay
+- for youtube: loop, controls, related_videos, autoplay
 - for internal videos webp, mp4 and so on: loop, muted, preload, controls
 
 ### Installation

@@ -22,4 +22,8 @@ call_user_func(function(string $extensionKey) {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Resource\\Rendering\\VimeoRenderer'] = [
         'className' => 'HauerHeinrich\\HhVideoExtender\\Rendering\\VimeoRenderer'
     ];
+
+    // Register UpdateWizards
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['hhVideoExtender_changeRelatedVideosFieldNameUpgradeWizard']
+        = \HauerHeinrich\HhVideoExtender\Upgrades\ChangeRelatedVideosFieldNameUpgradeWizard::class;
 }, 'hh_video_extender');

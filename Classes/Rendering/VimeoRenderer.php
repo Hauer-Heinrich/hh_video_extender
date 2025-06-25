@@ -46,7 +46,7 @@ class VimeoRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VimeoRenderer {
         $previewImageResult = '';
 
         $options = $this->collectOptions($options, $file);
-        $options['relatedVideos'] = $file->getProperty('relatedVideos');
+        $options['relatedVideos'] = $file->getProperty('related_videos');
         $options['autoplay'] = $file->getProperty('autoplay');
         $options['loop'] = $file->getProperty('loop');
         $options['controls'] = $file->getProperty('controls') ? 2 : 0;

@@ -46,7 +46,7 @@ class YouTubeRenderer extends \TYPO3\CMS\Core\Resource\Rendering\YouTubeRenderer
         $previewImageResult = '';
 
         $options = $this->collectOptions($options, $file);
-        $options['relatedVideos'] = $file->getProperty('relatedVideos');
+        $options['relatedVideos'] = $file->getProperty('related_videos') ? 1 : 0;
         $options['autoplay'] = $file->getProperty('autoplay');
         $options['loop'] = $file->getProperty('loop');
         $options['controls'] = $file->getProperty('controls') ? 2 : 0;
