@@ -19,6 +19,7 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Resource\FileInterface;
 use \TYPO3\CMS\Core\Resource\FileReference;
 use \TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 
 class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRenderer {
 
@@ -180,59 +181,8 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         $absoluteFilePath = $originalFile->getForLocalProcessing(false);
         $absoluteFilePathRemovedExtension = substr_replace($absoluteFilePath ,"", -1 * \strlen($file->getExtension()));
 
-        // Code for Track(s)-HTML-Tags
-        $tracks = '';
-        $trackKinds = ['captions', 'subtitles', 'chapters', 'descriptions', 'metadata'];
-
-
-        $originalFileNameWithExtension = $originalFile->getName();
-        $originalFileName = rtrim(substr_replace($originalFileNameWithExtension ,"", -1 * \strlen($file->getExtension())), '.');
-        $absoluteFileDirectoryPath = \str_replace($originalFile->getName(), '', $absoluteFilePath);
-        $tracksAbsoluteDirectoryPath = $absoluteFileDirectoryPath . $originalFileName . '_tracks/';
-        $tracksRelativeDirectoryPath = rtrim($resource, $originalFileNameWithExtension) . $originalFileName . '_tracks/';
-
-        if(is_dir($tracksAbsoluteDirectoryPath)) {
-            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-            $currentSite = $siteFinder->getSiteByPageId($GLOBALS['TSFE']->id);
-
-            // Enthält alle konfigurierten Sprachen
-            $availableLanguages = [];
-            foreach ($currentSite->getLanguages() as $language) {
-                $languageCode = $language->getLocale()->getLanguageCode(); // z. B. "de", "en"
-                $availableLanguages[$languageCode]['fallbackLabel'] = $language->getTitle(); // z. B. "Deutsch", "English"
-
-                if(isset($language->toArray()['videoTracks']['labels'])) {
-                    $availableLanguages[$languageCode]['labels'] = $language->toArray()['videoTracks']['labels'];
-                }
-            }
-
-            foreach ($availableLanguages as $langCode => $lang) {
-                $langDir = $tracksAbsoluteDirectoryPath . $langCode . '/';
-                if (!is_dir($langDir)) {
-                    continue;
-                }
-
-                foreach ($trackKinds as $kind) {
-                    if(isset($lang['labels'][$kind])) {
-                        $langLabel = $lang['labels'][$kind];
-                    } else {
-                        $langLabel = $lang['fallbackLabel'];
-                    }
-
-                    $absoluteFilePath = $tracksAbsoluteDirectoryPath . $langCode . '/' . $kind . '.vtt';
-                    if (file_exists($absoluteFilePath)) {
-                        $relativeFilePath = $tracksRelativeDirectoryPath . $langCode . '/' . $kind . '.vtt';
-                        $tracks .= sprintf(
-                            '<track src="%s" kind="%s" srclang="%s" label="%s">' . PHP_EOL,
-                            htmlspecialchars($relativeFilePath),
-                            $kind,
-                            $langCode,
-                            $langLabel
-                        );
-                    }
-                }
-            }
-        }
+        // create video tracks
+        $tracks = $this->createVideoTracks($originalFile, $resource, $absoluteFilePath);
 
         $videoSources = '';
         // webm
@@ -281,5 +231,129 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         $videoTagEnd = '</video>';
 
         return $videoTagBegin . $videoSources . $tracks . $videoTagEnd . $previewImageResult;
+    }
+
+    /**
+     * createVideoTracks
+     * creates HTML-track-tags for the HTML-video-tag
+     *
+     * @param  [type] $originalFile
+     * @param  [type] $resource
+     * @param  [type] $absoluteFilePath
+     * @return string
+     */
+    public function createVideoTracks($originalFile, $resource, $absoluteFilePath): string {
+         // Code for Track(s)-HTML-Tags
+        $tracks = '';
+        $trackKinds = ['captions', 'subtitles', 'chapters', 'descriptions', 'metadata'];
+
+        $originalFileNameWithExtension = $originalFile->getName();
+        // $originalFileName = rtrim(substr_replace($originalFileNameWithExtension ,"", -1 * \strlen($file->getExtension())), '.');
+        $originalFileName = pathinfo($originalFileNameWithExtension, PATHINFO_FILENAME);
+        $absoluteFileDirectoryPath = \str_replace($originalFile->getName(), '', $absoluteFilePath);
+        $tracksRelativeDirectoryPath = rtrim($resource, $originalFileNameWithExtension);
+
+        if (!is_dir($absoluteFileDirectoryPath) || !isset($GLOBALS['TSFE']->id)) {
+            return '';
+        }
+
+        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+        $currentSite = $siteFinder->getSiteByPageId($GLOBALS['TSFE']->id);
+        $isExtFilemetadataLoaded = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('filemetadata');
+
+        // Enthält alle konfigurierten Sprachen
+        $availableLanguages = [];
+        if($isExtFilemetadataLoaded) {
+            $fileVttLabelsAllLanguagesOriginal = $this->getSysFileMetaDataAllLanguages($originalFile->getUid(), $trackKinds);
+
+            // set array key to languageKey for easier access later
+            $fileVttLabelsAllLanguages = [];
+            foreach ($fileVttLabelsAllLanguagesOriginal as $value) {
+                $fileVttLabelsAllLanguages[$value['sys_language_uid']] = $value;
+            }
+        }
+
+        foreach ($currentSite->getLanguages() as $language) {
+            $languageUid = $language->getLanguageId();
+            $languageCode = $language->getLocale()->getLanguageCode(); // z. B. "de", "en"
+            $availableLanguages[$languageCode]['uid'] = $languageUid;
+            $fallbackLabel = $language->getTitle(); // z. B. "Deutsch", "English"
+            $siteLanguageArray = $language->toArray();
+
+            foreach ($trackKinds as $kind) {
+                // set label to global values set in site configuration
+                $label = $fallbackLabel;
+
+                // Configuration from site-config
+                if (!empty($siteLanguageArray['videoTracks']['labels'][$kind])) {
+                    $label = $siteLanguageArray['videoTracks']['labels'][$kind];
+                }
+
+                // overwrite labels if EXT:filemetadata is enabled and if track label values are given for this file
+                if (!empty($fileVttLabelsAllLanguages[$languageUid]['vtt_' . $kind . '_label'])) {
+                    $label = $fileVttLabelsAllLanguages[$languageUid]['vtt_' . $kind . '_label'];
+                }
+
+                $availableLanguages[$languageCode]['labels'][$kind] = $label;
+            }
+        }
+
+        foreach ($availableLanguages as $langCode => $lang) {
+            if(!empty($lang['labels'])) {
+                foreach ($lang['labels'] as $kind => $label) {
+                    // special case "default"
+                    foreach (['default', null] as $suffix) {
+                        $suffix = $suffix ? $suffix : '';
+                        $trackFileName = $originalFileName . '.' . $kind . '.' . $langCode . ($suffix ? '.'.$suffix : '') . '.vtt';
+                        $absoluteTrackPath = $absoluteFileDirectoryPath . $trackFileName;
+
+                        if (file_exists($absoluteTrackPath)) {
+                            $relativeFilePath = $tracksRelativeDirectoryPath . $trackFileName;
+
+                            $tracks .= sprintf(
+                                '<track src="%s" kind="%s" srclang="%s" label="%s" %s>' . PHP_EOL,
+                                htmlspecialchars($relativeFilePath),
+                                $kind,
+                                $langCode,
+                                $label,
+                                $suffix
+                            );
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $tracks;
+    }
+
+    /**
+     * getSysFileMetaDataAllLanguages
+     * Get all track-kind labels for all available languages
+     *
+     * @param  integer $fileUid
+     * @param  array   $trackKinds
+     * @return array
+     */
+    public function getSysFileMetaDataAllLanguages(int $fileUid, array $trackKinds): array {
+        $dbTrackFields = [];
+        foreach ($trackKinds as $kind) {
+            $dbTrackFields[] = 'vtt_'.$kind.'_label';
+        }
+
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('sys_file_metadata');
+
+        return $queryBuilder
+            ->select('file', 'sys_language_uid', 'l10n_parent', ...$dbTrackFields)
+            ->from('sys_file_metadata')
+            ->where(
+                $queryBuilder->expr()->eq('file', $queryBuilder->createNamedParameter($fileUid)),
+            )
+            ->orWhere(
+                $queryBuilder->expr()->eq('l10n_parent', $queryBuilder->createNamedParameter($fileUid))
+            )
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 }

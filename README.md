@@ -71,14 +71,31 @@ This option uses JavaScript which is included, but it is recommended to use your
 (default: off).
 
 #### Video tracks-tags - Usage (currently)
-For example, you have a video file in "fileadmin/user_uploads/my_videos/" and the video is called your_video_name.mp4", then you need to create a folder with the same name of the video plus the suffix "_tracks"(!), in our example: "fileadmin/user_uploads/my_videos/your_video_name_tracks/".
-Within this folder, you must create a folder for each language you want to use, for example "en" or ‘de’ ("fileadmin/user_uploads/my_videos/your_video_name_tracks/en/").
-You can then create your ".vtt" files - i.e. "captions.vtt", "chapters.vtt", "descriptions.vtt", "subtitles.vtt" - within this language folder.
+For example, you have a video file in "fileadmin/user_uploads/my_videos/" and the video is called "your_video_name.mp4".
+Then you have to create a file for each "track-type" and language, e. g.:
+- fileadmin/user_uploads/my_videos/your_video_name.mp4
+- fileadmin/user_uploads/my_videos/your_video_name.webm
+- fileadmin/user_uploads/my_videos/your_video_name.captions.de.vtt
+- fileadmin/user_uploads/my_videos/your_video_name.subtitles.de.vtt
+- fileadmin/user_uploads/my_videos/your_video_name.captions.en.vtt
+- fileadmin/user_uploads/my_videos/your_video_name.subtitles.en.vtt
+- etc.
+
+For the html-track-tag attribute "default" you have to name your file like (added string "default" to the file name):
+- fileadmin/user_uploads/my_videos/your_video_name.captions.de.default.vtt
+IMPORTANT: only one default file per video should be set!
+
+Currently available track types:
+- "captions"
+- "chapters"
+- "descriptions"
+- "subtitles"
+
 You can find examples of these here: [VTT files](Examples/VTT/).
 
 ##### If you want custom track-labels
-Default (fallback): uses the "title" of the language from your site config.yaml
-Custom:
+Default (default fallback, for every file): uses the "title" of the language from your site config.yaml
+Custom site config (site fallback, for every file):
 Add an entry below "videoTracks" -> "labels" for each language in your site config.yaml for each type of track (structure is important), e. g.:
 ```
 languages:
@@ -102,8 +119,12 @@ languages:
         subtitles: label customized for subtiles
 ```
 
+Custom per file:
+Make sure that the TYPO3 core extension "filemetadata" is loaded.
+Then you can set the labels for each file via module "filelist" (fileadmin) -> your file metadata.
+These labels set in the file metadata overwrites all other settings.
+
 HINT:
-- after changeing the site-config, clear the cache :)
 - "chapters" are loaded depending on the html-tag attribute "lang" (with fallback to english if available).
 - currently only languages are loaded that are also stored in the TYPO3 site-config.yaml.
 

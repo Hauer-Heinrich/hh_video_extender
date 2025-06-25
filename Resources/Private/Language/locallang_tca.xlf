@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2017-02-08T00:01:00Z" product-name="hh_video_extender">
+        <header/>
+        <body>
+
+            <trans-unit id="div.tracks" xml:space="preserve">
+                <source>Tracks VTT Metadata</source>
+            </trans-unit>
+
+            <trans-unit id="palette.tracks" xml:space="preserve">
+                <source>Video tracks</source>
+            </trans-unit>
+
+            <trans-unit id="track.captions.label" xml:space="preserve">
+                <source>Label for captions</source>
+            </trans-unit>
+            <trans-unit id="track.subtitles.label" xml:space="preserve">
+                <source>Label for subtitles</source>
+            </trans-unit>
+            <trans-unit id="track.chapters.label" xml:space="preserve">
+                <source>Label for chapters</source>
+            </trans-unit>
+            <trans-unit id="track.descriptions.label" xml:space="preserve">
+                <source>Label for descriptions</source>
+            </trans-unit>
+            <trans-unit id="track.metadata.label" xml:space="preserve">
+                <source>Label for metadata</source>
+            </trans-unit>
+
+            <trans-unit id="video.options.loop" xml:space="preserve">
+                <source>Loop</source>
+            </trans-unit>
+            <trans-unit id="video.options.muted" xml:space="preserve">
+                <source>Muted (automatically on autoplay)</source>
+            </trans-unit>
+            <trans-unit id="video.options.preload" xml:space="preserve">
+                <source>Preload</source>
+            </trans-unit>
+            <trans-unit id="video.options.defer" xml:space="preserve">
+                <source>Defer loading</source>
+            </trans-unit>
+            <trans-unit id="video.options.related_videos" xml:space="preserve">
+                <source>Disable related videos</source>
+            </trans-unit>
+            <trans-unit id="video.options.related_videos.description" xml:space="preserve">
+                <source>Works only for youtube, still shows channel own videos.</source>
+            </trans-unit>
+            <trans-unit id="video.options.controls" xml:space="preserve">
+                <source>Controls</source>
+            </trans-unit>
+            <trans-unit id="video.options.preview_image" xml:space="preserve">
+                <source>Preview image</source>
+            </trans-unit>
+            <trans-unit id="video.options.click_preview_image_to_show_video" xml:space="preserve">
+                <source>Show the video only after clicking on the preview image</source>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>
