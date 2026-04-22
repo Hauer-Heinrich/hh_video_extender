@@ -42,7 +42,11 @@
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
             "web-dir": ".Build/Web",
-            "extension-key": "hh_video_extender"
+            "extension-key": "hh_video_extender",
+            "version": "0.5.0",
+            "Package": {
+                "providesPackages": {}
+            }
         }
     }
 }
