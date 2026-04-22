@@ -38,7 +38,7 @@ use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GetTypoScriptConfigViewHelper extends AbstractViewHelper {
-    public function initializeArguments() {
+    public function initializeArguments(): void {
         $this->registerArgument('as', 'string', 'The name of the iteration variable', false, 'hhvideoextender');
         $this->registerArgument('ext', 'string', 'The name of the extension (default: hhvideoextender)', false, 'hhvideoextender');
     }
