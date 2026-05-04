@@ -14,12 +14,13 @@ namespace HauerHeinrich\HhVideoExtender\Rendering;
  * The TYPO3 project - inspiring people to share!
  */
 
-// use \TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use \Psr\Http\Message\ServerRequestInterface;
+use \TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Resource\FileInterface;
 use \TYPO3\CMS\Core\Resource\FileReference;
 use \TYPO3\CMS\Core\Site\SiteFinder;
-use TYPO3\CMS\Core\Database\ConnectionPool;
+use \TYPO3\CMS\Core\Database\ConnectionPool;
 
 class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRenderer {
 
@@ -30,10 +31,9 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
      * @param int|string $width TYPO3 known format; examples: 220, 200m or 200c
      * @param int|string $height TYPO3 known format; examples: 220, 200m or 200c
      * @param array $options controls = TRUE/FALSE (default TRUE), autoplay = TRUE/FALSE (default FALSE), loop = TRUE/FALSE (default FALSE)
-     * @param bool $usedPathsRelativeToCurrentScript See $file->getPublicUrl()
      * @return string
      */
-    public function render(FileInterface $file, $width, $height, array $options = [], $usedPathsRelativeToCurrentScript = false) {
+    public function render(FileInterface $file, $width, $height, array $options = []): string {
         $configurationManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface');
         $settings = $configurationManager->getConfiguration(
             \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,
@@ -63,6 +63,7 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
                 }
             }
         }
+
 
         if(!isset($options['preload'])) {
             $val = $file->getProperty('preload');
@@ -168,7 +169,7 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         // Clean up duplicate attributes
         $attributes = array_unique($attributes);
 
-        $resource = $file->getPublicUrl($usedPathsRelativeToCurrentScript);
+        $resource = $file->getPublicUrl();
         $removedExtension = substr_replace($resource ,"", -1 * \strlen($file->getExtension()));
 
         if($file instanceof \TYPO3\CMS\Core\Resource\FileReference) {
@@ -233,6 +234,10 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         return $videoTagBegin . $videoSources . $tracks . $videoTagEnd . $previewImageResult;
     }
 
+    private function getRequest(): ServerRequestInterface {
+        return $GLOBALS['TYPO3_REQUEST'];
+    }
+
     /**
      * createVideoTracks
      * creates HTML-track-tags for the HTML-video-tag
@@ -253,12 +258,23 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         $absoluteFileDirectoryPath = \str_replace($originalFile->getName(), '', $absoluteFilePath);
         $tracksRelativeDirectoryPath = rtrim($resource, $originalFileNameWithExtension);
 
-        if (!is_dir($absoluteFileDirectoryPath) || !isset($GLOBALS['TSFE']->id)) {
+        if (!is_dir($absoluteFileDirectoryPath)) {
+            return '';
+        }
+
+
+        //DebuggerUtility::var_dump($GLOBALS['TYPO3_REQUEST'], 'VideoTagRenderer options');
+
+        // Get current page ID from request attributes
+        $request = $this->getRequest(); //$GLOBALS['TYPO3_REQUEST'] ?? null;
+        $pageId = $request?->getAttribute('routing')?->getPageId();
+
+        if ($pageId === null) {
             return '';
         }
 
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-        $currentSite = $siteFinder->getSiteByPageId($GLOBALS['TSFE']->id);
+        $currentSite = $siteFinder->getSiteByPageId($pageId);
         $isExtFilemetadataLoaded = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('filemetadata');
 
         // Enthält alle konfigurierten Sprachen
@@ -274,11 +290,11 @@ class VideoTagRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VideoTagRender
         }
 
         foreach ($currentSite->getLanguages() as $language) {
-            $languageUid = $language->getLanguageId();
-            $languageCode = $language->getLocale()->getLanguageCode(); // z. B. "de", "en"
-            $availableLanguages[$languageCode]['uid'] = $languageUid;
-            $fallbackLabel = $language->getTitle(); // z. B. "Deutsch", "English"
+            $languageCode = $language->getLocale()->getLanguageCode(); // z. B. "de", "en"
             $siteLanguageArray = $language->toArray();
+            $languageUid = (int)$siteLanguageArray['languageId'];
+            $availableLanguages[$languageCode]['uid'] = $languageUid;
+            $fallbackLabel = $language->getTitle(); // z. B. "Deutsch", "English"
 
             foreach ($trackKinds as $kind) {
                 // set label to global values set in site configuration

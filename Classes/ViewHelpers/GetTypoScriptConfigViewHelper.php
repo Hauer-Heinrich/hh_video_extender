@@ -32,8 +32,6 @@ namespace HauerHeinrich\HhVideoExtender\ViewHelpers;
  *  <hhve:getTypoScriptConfig>
  */
 
-// use \TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -44,23 +42,19 @@ class GetTypoScriptConfigViewHelper extends AbstractViewHelper {
     }
 
     /**
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     *
      * @return string
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext) {
-        $templateVariableContainer = $renderingContext->getVariableProvider();
+    public function render(): string {
+        $templateVariableContainer = $this->renderingContext->getVariableProvider();
         $configurationManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
 
         $typoScript = $configurationManager->getConfiguration(
             \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-            $arguments['ext']
+            $this->arguments['ext']
         );
-        $output = '';
-        $templateVariableContainer->add($arguments['as'], $typoScript);
-        $output .= $renderChildrenClosure();
+
+        $templateVariableContainer->add($this->arguments['as'], $typoScript);
+        $output = $this->renderChildren() ?? '';
 
         return $output;
     }
