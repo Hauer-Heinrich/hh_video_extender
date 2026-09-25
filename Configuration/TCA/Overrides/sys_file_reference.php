@@ -112,7 +112,7 @@ call_user_func(function(string $extensionKey) {
                 'type' => 'file',
                 'minitems' => 0,
                 'maxitems' => 1,
-                'allowd' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+                'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
             ],
         ],
         'click_preview_image_to_show_video' => [
