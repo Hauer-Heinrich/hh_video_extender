@@ -49,6 +49,12 @@
             <trans-unit id="video.options.controls" xml:space="preserve">
                 <source>Controls</source>
             </trans-unit>
+            <trans-unit id="video.options.aspect_ratio" xml:space="preserve">
+                <source>Aspect ratio</source>
+            </trans-unit>
+            <trans-unit id="video.options.aspect_ratio.description" xml:space="preserve">
+                <source>Choose 9:16 for vertically oriented videos, e.g. YouTube Shorts, Reels or mobile recordings, to keep the correct aspect ratio.</source>
+            </trans-unit>
             <trans-unit id="video.options.preview_image" xml:space="preserve">
                 <source>Preview image</source>
             </trans-unit>

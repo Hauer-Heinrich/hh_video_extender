@@ -5,7 +5,7 @@
 <hhve:getTypoScriptConfig as="hhvideoextender" />
 <f:variable name="clickPreviewImage"><f:if condition="{hhvideoextender.clickPreviewImageToShowVideo}"><f:then>{hhvideoextender.clickPreviewImageToShowVideo}</f:then><f:else>{mediaElement.originalResource.properties.click_preview_image_to_show_video}</f:else></f:if></f:variable>
 
-<div class="mediaelement" data-type="{f:if(condition: '{mediaElement.originalResource.extension} == youtube || {mediaElement.originalResource.extension} == vimeo', then: 'external')}" data-click-previewimage="{clickPreviewImage}">
+<div class="mediaelement" data-type="{f:if(condition: '{mediaElement.originalResource.extension} == youtube || {mediaElement.originalResource.extension} == vimeo', then: 'external')}" data-aspect-ratio="{f:if(condition: '{mediaElement.originalResource.properties.aspect_ratio}', then: '{mediaElement.originalResource.properties.aspect_ratio}', else: '16:9')}" data-click-previewimage="{clickPreviewImage}">
     <div class="mediaelement-video video-embed">
         <f:media file="{mediaElement}" width="{settings.detail.media.video.width}" height="{settings.detail.media.video.height}"/>
     </div>

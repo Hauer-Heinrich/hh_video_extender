@@ -18,7 +18,7 @@
 
 <f:variable name="clickPreviewImage"><f:if condition="{file.properties.click_preview_image_to_show_video}"><f:then>{file.properties.click_preview_image_to_show_video}</f:then><f:else><f:if condition="{hhvideoextender.clickPreviewImageToShowVideo}">{hhvideoextender.clickPreviewImageToShowVideo}</f:if></f:else></f:if></f:variable>
 
-<figure class="video" data-type="{f:if(condition: '{file.extension} == youtube || {file.extension} == vimeo', then: 'external')}" data-click-previewImage="{clickPreviewImage}">
+<figure class="video" data-type="{f:if(condition: '{file.extension} == youtube || {file.extension} == vimeo', then: 'external')}" data-aspect-ratio="{f:if(condition: '{file.properties.aspect_ratio}', then: '{file.properties.aspect_ratio}', else: '16:9')}" data-click-previewImage="{clickPreviewImage}">
     <div class="video-embed">
         <f:render partial="Media/Rendering/Video" arguments="{file: file, dimensions: dimensions, settings: settings}" />
     </div>

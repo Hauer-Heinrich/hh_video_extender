@@ -106,6 +106,34 @@ call_user_func(function(string $extensionKey) {
                 ],
             ],
         ],
+        'aspect_ratio' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:'.$extensionKey.'/Resources/Private/Language/locallang_tca.xlf:video.options.aspect_ratio',
+            'description' => 'LLL:EXT:'.$extensionKey.'/Resources/Private/Language/locallang_tca.xlf:video.options.aspect_ratio.description',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    [
+                        'label' => '16:9',
+                        'value' => '16:9',
+                    ],
+                    [
+                        'label' => '9:16',
+                        'value' => '9:16',
+                    ],
+                    [
+                        'label' => '1:1',
+                        'value' => '1:1',
+                    ],
+                    [
+                        'label' => '21:9',
+                        'value' => '21:9',
+                    ],
+                ],
+                'default' => '16:9',
+            ]
+        ],
         'preview_image' => [
             'label' => 'LLL:EXT:'.$extensionKey.'/Resources/Private/Language/locallang_tca.xlf:video.options.preview_image',
             'config' => [
@@ -140,6 +168,6 @@ call_user_func(function(string $extensionKey) {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
         'sys_file_reference',
         'videoOverlayPalette',
-        'loop, muted, preload, defer, related_videos, controls, --linebreak--, preview_image, --linebreak--, click_preview_image_to_show_video'
+        'loop, muted, preload, defer, related_videos, controls, aspect_ratio, --linebreak--, preview_image, --linebreak--, click_preview_image_to_show_video'
     );
 }, 'hh_video_extender');
