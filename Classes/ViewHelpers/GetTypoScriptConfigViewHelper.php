@@ -46,16 +46,40 @@ class GetTypoScriptConfigViewHelper extends AbstractViewHelper {
      */
     public function render(): string {
         $templateVariableContainer = $this->renderingContext->getVariableProvider();
-        $configurationManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+        $typoScript = $this->getSettingsFromRequest();
 
-        $typoScript = $configurationManager->getConfiguration(
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-            $this->arguments['ext']
-        );
+        if ($typoScript === null) {
+            $configurationManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+            $typoScript = $configurationManager->getConfiguration(
+                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                $this->arguments['ext']
+            );
+        }
 
         $templateVariableContainer->add($this->arguments['as'], $typoScript);
         $output = $this->renderChildren() ?? '';
 
         return $output;
+    }
+
+    /**
+     * TYPO3 v13: read plugin.tx_<ext>.settings directly from the frontend TypoScript of the current request,
+     * the request-less ConfigurationManager does not return frontend settings there.
+     */
+    private function getSettingsFromRequest(): ?array {
+        $request = method_exists($this->renderingContext, 'getRequest') ? $this->renderingContext->getRequest() : null;
+        $frontendTypoScript = $request?->getAttribute('frontend.typoscript');
+        if ($frontendTypoScript === null || !$frontendTypoScript->hasSetup()) {
+            return null;
+        }
+
+        $setup = $frontendTypoScript->getSetupArray();
+        $settings = $setup['plugin.']['tx_' . strtolower($this->arguments['ext']) . '.']['settings.'] ?? null;
+        if (!is_array($settings)) {
+            return null;
+        }
+
+        return GeneralUtility::makeInstance(\TYPO3\CMS\Core\TypoScript\TypoScriptService::class)
+            ->convertTypoScriptArrayToPlainArray($settings);
     }
 }
